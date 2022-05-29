@@ -1,12 +1,20 @@
-import { extendType, list, objectType, queryType } from "nexus"
-import { Node } from "./Node"
+import { extendType, list, nonNull, objectType, queryType } from "nexus"
+import { Membership } from "./Membership"
 import { Query } from "./Query"
 
 export const User = objectType({
     name: 'User',
     definition(t) {
-        t.implements(Node)
+        t.nonNull.id('user_id')
         t.nonNull.string('user_name')
+
+        t.field("memberships", {
+            type: nonNull(list(nonNull(Membership))),
+            async resolve(source, args, context) {
+                const memberships = await context.membershipStore.query().wherePartitionKey(source.user_id).exec()
+                return memberships;
+            }
+        })
     }
 })
 
@@ -15,7 +23,7 @@ export const UserQuery = extendType({
     type: Query.name,
     definition(t) {
       t.nullable.field("allUsers", { 
-        type: list(User),
+        type: nonNull(list(nonNull(User))),
         authorize: (root, args, context) => context.authSource.canViewAllUsers(),
         async resolve(source, args, context) {
             const users = await context.userStore.scan().exec()

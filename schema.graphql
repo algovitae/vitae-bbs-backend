@@ -7,31 +7,35 @@ type Auth {
   user_identity: UserIdentity
 }
 
+type Group {
+  group_id: ID!
+  group_name: String!
+}
+
+type Membership {
+  group: Group!
+  group_id: String!
+  user: User!
+  user_id: String!
+}
+
 type Mutation {
   login(email: String, password: String): Auth
 }
 
-interface Node {
-  """unique identifier for the resource"""
-  id: ID
-}
-
 type Query {
-  allUsers: [User]
+  allUsers: [User!]!
   userIdentityByAuthorization: UserIdentity
 }
 
-type User implements Node {
-  """unique identifier for the resource"""
-  id: ID
+type User {
+  memberships: [Membership!]!
+  user_id: ID!
   user_name: String!
 }
 
-type UserIdentity implements Node {
-  email: String!
-
-  """unique identifier for the resource"""
-  id: ID
+type UserIdentity {
+  email: ID!
   password_hash: String!
   user: User
   user_id: String!

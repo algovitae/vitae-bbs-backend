@@ -22,7 +22,11 @@ export class AuthSource  {
         }
     }
 
-    async canViewAllUsers() {
+    async isAuthorized() {
         return !!(await this.userId())
+    }
+
+    async canViewAllUsers() {
+        return this.isAuthorized()
     }
 }

@@ -32,7 +32,7 @@ export const AuthMutation = mutationType({
                     return null
                 }
                 return {
-                    token: Buffer.from(JSON.stringify({user_id: userIdentity.user_id, email: userIdentity.email})).toString('base64'), // TODO: 署名
+                    token: Buffer.from(JSON.stringify({ user_id: userIdentity.user_id, email: userIdentity.email })).toString('base64'), // TODO: 署名
                     user_identity: userIdentity
                 }
             }
@@ -43,15 +43,15 @@ export const AuthMutation = mutationType({
 export const MeQuery = extendType({
     type: Query.name,
     definition(t) {
-      t.nullable.field("userIdentityByAuthorization", { 
-        type: UserIdentity,
-        args: {
-            
-        },
-        async resolve(source, args, context) {
-          const email = await context.authSource.email();
-          return email ? await context.userIdentityStore.get(email).exec() : null
-        }
-       })
+        t.nullable.field("userIdentityByAuthorization", {
+            type: UserIdentity,
+            args: {
+
+            },
+            async resolve(source, args, context) {
+                const email = await context.authSource.email();
+                return email ? await context.userIdentityStore.get(email).exec() : null
+            }
+        })
     },
-  })
+})

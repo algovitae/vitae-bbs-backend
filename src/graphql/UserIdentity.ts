@@ -1,14 +1,11 @@
 import { extendType, mutationType, objectType, queryType, stringArg } from "nexus"
-import { userStore } from "../ddb/User"
-import { Node } from "./Node"
 import { User } from "./User"
 
 export const UserIdentity = objectType({
   name: "UserIdentity",
   definition(t) {
-    t.implements(Node)
+    t.nonNull.id('email')
     t.nonNull.string('user_id')
-    t.nonNull.string('email')
     t.nonNull.string('password_hash')
 
     t.field('user', {

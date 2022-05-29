@@ -33,28 +33,34 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user_identity?: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
+  Group: { // root type
+    group_id: string; // ID!
+    group_name: string; // String!
+  }
+  Membership: { // root type
+    group_id: string; // String!
+    user_id: string; // String!
+  }
   Mutation: {};
   Query: {};
   User: { // root type
-    id?: string | null; // ID
+    user_id: string; // ID!
     user_name: string; // String!
   }
   UserIdentity: { // root type
-    email: string; // String!
-    id?: string | null; // ID
+    email: string; // ID!
     password_hash: string; // String!
     user_id: string; // String!
   }
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['UserIdentity'];
 }
 
 export interface NexusGenUnions {
 }
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
+export type NexusGenRootTypes = NexusGenObjects
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
@@ -63,26 +69,33 @@ export interface NexusGenFieldTypes {
     token: string | null; // String
     user_identity: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
+  Group: { // field return type
+    group_id: string; // ID!
+    group_name: string; // String!
+  }
+  Membership: { // field return type
+    group: NexusGenRootTypes['Group']; // Group!
+    group_id: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+    user_id: string; // String!
+  }
   Mutation: { // field return type
     login: NexusGenRootTypes['Auth'] | null; // Auth
   }
   Query: { // field return type
-    allUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    allUsers: NexusGenRootTypes['User'][]; // [User!]!
     userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
   User: { // field return type
-    id: string | null; // ID
+    memberships: NexusGenRootTypes['Membership'][]; // [Membership!]!
+    user_id: string; // ID!
     user_name: string; // String!
   }
   UserIdentity: { // field return type
-    email: string; // String!
-    id: string | null; // ID
+    email: string; // ID!
     password_hash: string; // String!
     user: NexusGenRootTypes['User'] | null; // User
     user_id: string; // String!
-  }
-  Node: { // field return type
-    id: string | null; // ID
   }
 }
 
@@ -90,6 +103,16 @@ export interface NexusGenFieldTypeNames {
   Auth: { // field return type name
     token: 'String'
     user_identity: 'UserIdentity'
+  }
+  Group: { // field return type name
+    group_id: 'ID'
+    group_name: 'String'
+  }
+  Membership: { // field return type name
+    group: 'Group'
+    group_id: 'String'
+    user: 'User'
+    user_id: 'String'
   }
   Mutation: { // field return type name
     login: 'Auth'
@@ -99,18 +122,15 @@ export interface NexusGenFieldTypeNames {
     userIdentityByAuthorization: 'UserIdentity'
   }
   User: { // field return type name
-    id: 'ID'
+    memberships: 'Membership'
+    user_id: 'ID'
     user_name: 'String'
   }
   UserIdentity: { // field return type name
-    email: 'String'
-    id: 'ID'
+    email: 'ID'
     password_hash: 'String'
     user: 'User'
     user_id: 'String'
-  }
-  Node: { // field return type name
-    id: 'ID'
   }
 }
 
@@ -124,12 +144,9 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "User" | "UserIdentity"
 }
 
 export interface NexusGenTypeInterfaces {
-  User: "Node"
-  UserIdentity: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -138,7 +155,7 @@ export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = never;
 
-export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
+export type NexusGenInterfaceNames = never;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -146,7 +163,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "Node";
+export type NexusGenAbstractsUsingStrategyResolveType = never;
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
