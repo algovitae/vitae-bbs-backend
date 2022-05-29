@@ -1,6 +1,7 @@
 import { compare } from "bcrypt"
-import { mutationType, objectType, queryType, stringArg } from "nexus"
+import { extendType, mutationType, objectType, queryType, stringArg } from "nexus"
 import { userIdentityStore } from "../ddb/UserIdentity"
+import { Query } from "./Query"
 import { UserIdentity } from "./UserIdentity"
 
 export const Auth = objectType({
@@ -39,7 +40,8 @@ export const AuthMutation = mutationType({
     }
 })
 
-export const MeQuery = queryType({
+export const MeQuery = extendType({
+    type: Query.name,
     definition(t) {
       t.nullable.field("userIdentityByAuthorization", { 
         type: UserIdentity,

@@ -17,6 +17,7 @@ interface Node {
 }
 
 type Query {
+  allUsers: [User]
   userIdentityByAuthorization: UserIdentity
 }
 

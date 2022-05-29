@@ -1,8 +1,8 @@
-import { interfaceType, makeSchema, objectType, queryType } from "nexus";
+import { fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType } from "nexus";
 import { join } from "path";
 import { AuthMutation, MeQuery } from "./graphql/Auth";
-import { User } from "./graphql/User";
-import { UserIdentity, UserIdentityQuery } from "./graphql/UserIdentity";
+import { User, UserQuery } from "./graphql/User";
+import { UserIdentity } from "./graphql/UserIdentity";
 
 // TODO: relationなどを明確にする
 // TODO: PK,SKの組み合わせの場合にどうするべきか考える
@@ -66,14 +66,17 @@ export const schema = makeSchema({
     AuthMutation,
     MeQuery,
     User,
+    UserQuery,
     UserIdentity,
-    UserIdentityQuery
     // Group,
     // Membership,
     // Thread,
     // ThreadComment
   },
   contextType: { module: join(__dirname, 'graphql', 'context', 'AppContext.ts'), export: 'AppContext' },
+  plugins: [
+    fieldAuthorizePlugin()
+  ],
   outputs: {
     typegen: join(__dirname, '..', 'nexus-typegen.ts'),
     schema: join(__dirname, '..', 'schema.graphql'),

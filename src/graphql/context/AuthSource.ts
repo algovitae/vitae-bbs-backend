@@ -21,4 +21,8 @@ export class AuthSource  {
             return JSON.parse(token)['email'] as string
         }
     }
+
+    async canViewAllUsers() {
+        return !!(await this.userId())
+    }
 }
