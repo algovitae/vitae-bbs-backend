@@ -64,6 +64,7 @@ export interface NexusGenFieldTypes {
     email: string | null; // String
     id: string | null; // ID
     password_hash: string | null; // String
+    user: NexusGenRootTypes['User'] | null; // User
     user_id: string | null; // String
   }
   Node: { // field return type
@@ -83,6 +84,7 @@ export interface NexusGenFieldTypeNames {
     email: 'String'
     id: 'ID'
     password_hash: 'String'
+    user: 'User'
     user_id: 'String'
   }
   Node: { // field return type name

@@ -1,5 +1,6 @@
 import { extendType, objectType, queryType, stringArg } from "nexus"
 import { Node } from "./Node"
+import { User } from "./User"
 
 export const UserIdentity = objectType({
   name: "UserIdentity",
@@ -8,6 +9,14 @@ export const UserIdentity = objectType({
     t.string('user_id')
     t.string('email')
     t.string('password_hash')
+
+    t.field('user', {
+      type: User,
+      resolve(source, _args, context) {
+        return { id: 'User/d405b106-dee7-11ec-a125-0242ac140002', user_name: 'example user' }
+      }
+    })
+    
   }
 })
 

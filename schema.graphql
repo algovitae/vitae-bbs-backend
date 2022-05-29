@@ -23,5 +23,6 @@ type UserIdentity implements Node {
   """unique identifier for the resource"""
   id: ID
   password_hash: String
+  user: User
   user_id: String
 }
