@@ -1,5 +1,5 @@
 import { compare } from "bcrypt"
-import { mutationType, objectType, stringArg } from "nexus"
+import { mutationType, objectType, queryType, stringArg } from "nexus"
 import { userIdentityStore } from "../ddb/UserIdentity"
 import { UserIdentity } from "./UserIdentity"
 
@@ -31,10 +31,25 @@ export const AuthMutation = mutationType({
                     return null
                 }
                 return {
-                    token: 'the token',
+                    token: Buffer.from(JSON.stringify({user_id: userIdentity.user_id, email: userIdentity.email})).toString('base64'), // TODO: 署名
                     user_identity: userIdentity
                 }
             }
         })
     }
 })
+
+export const MeQuery = queryType({
+    definition(t) {
+      t.nullable.field("userIdentityByAuthorization", { 
+        type: UserIdentity,
+        args: {
+            
+        },
+        async resolve(source, args, context) {
+          const email = await context.authSource.email();
+          return email ? await context.userIdentityStore.get(email).exec() : null
+        }
+       })
+    },
+  })

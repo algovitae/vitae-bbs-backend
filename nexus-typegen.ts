@@ -66,7 +66,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['Auth'] | null; // Auth
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
   User: { // field return type
     id: string | null; // ID
@@ -93,7 +93,7 @@ export interface NexusGenFieldTypeNames {
     login: 'Auth'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    userIdentityByAuthorization: 'UserIdentity'
   }
   User: { // field return type name
     id: 'ID'

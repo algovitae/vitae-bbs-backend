@@ -1,6 +1,6 @@
 import { interfaceType, makeSchema, objectType, queryType } from "nexus";
 import { join } from "path";
-import { AuthMutation } from "./graphql/Auth";
+import { AuthMutation, MeQuery } from "./graphql/Auth";
 import { User } from "./graphql/User";
 import { UserIdentity, UserIdentityQuery } from "./graphql/UserIdentity";
 
@@ -64,6 +64,7 @@ import { UserIdentity, UserIdentityQuery } from "./graphql/UserIdentity";
 export const schema = makeSchema({
   types: {
     AuthMutation,
+    MeQuery,
     User,
     UserIdentity,
     UserIdentityQuery

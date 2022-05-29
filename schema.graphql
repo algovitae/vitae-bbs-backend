@@ -17,7 +17,7 @@ interface Node {
 }
 
 type Query {
-  ok: Boolean!
+  userIdentityByAuthorization: UserIdentity
 }
 
 type User implements Node {

@@ -17,6 +17,6 @@ export const UserIdentity = objectType({
         return context.userStore.get(source.user_id).exec()
       }
     })
-    
+
   }
 })
