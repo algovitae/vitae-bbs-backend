@@ -36,13 +36,13 @@ export interface NexusGenObjects {
   Query: {};
   User: { // root type
     id?: string | null; // ID
-    user_name?: string | null; // String
+    user_name: string; // String!
   }
   UserIdentity: { // root type
-    email?: string | null; // String
+    email: string; // String!
     id?: string | null; // ID
-    password_hash?: string | null; // String
-    user_id?: string | null; // String
+    password_hash: string; // String!
+    user_id: string; // String!
   }
 }
 
@@ -70,14 +70,14 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     id: string | null; // ID
-    user_name: string | null; // String
+    user_name: string; // String!
   }
   UserIdentity: { // field return type
-    email: string | null; // String
+    email: string; // String!
     id: string | null; // ID
-    password_hash: string | null; // String
+    password_hash: string; // String!
     user: NexusGenRootTypes['User'] | null; // User
-    user_id: string | null; // String
+    user_id: string; // String!
   }
   Node: { // field return type
     id: string | null; // ID

@@ -23,15 +23,15 @@ type Query {
 type User implements Node {
   """unique identifier for the resource"""
   id: ID
-  user_name: String
+  user_name: String!
 }
 
 type UserIdentity implements Node {
-  email: String
+  email: String!
 
   """unique identifier for the resource"""
   id: ID
-  password_hash: String
+  password_hash: String!
   user: User
-  user_id: String
+  user_id: String!
 }

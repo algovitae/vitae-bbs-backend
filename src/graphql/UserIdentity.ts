@@ -1,4 +1,5 @@
 import { extendType, mutationType, objectType, queryType, stringArg } from "nexus"
+import { userStore } from "../ddb/User"
 import { Node } from "./Node"
 import { User } from "./User"
 
@@ -6,14 +7,14 @@ export const UserIdentity = objectType({
   name: "UserIdentity",
   definition(t) {
     t.implements(Node)
-    t.string('user_id')
-    t.string('email')
-    t.string('password_hash')
+    t.nonNull.string('user_id')
+    t.nonNull.string('email')
+    t.nonNull.string('password_hash')
 
     t.field('user', {
       type: User,
-      resolve(source, _args, context) {
-        return { id: 'User/d405b106-dee7-11ec-a125-0242ac140002', user_name: 'example user' }
+      async resolve(source, _args, context) {
+        return userStore.get(source.user_id).exec()
       }
     })
     

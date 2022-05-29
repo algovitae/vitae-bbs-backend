@@ -5,6 +5,6 @@ export const User = objectType({
     name: 'User',
     definition(t) {
         t.implements(Node)
-        t.string('user_name')
+        t.nonNull.string('user_name')
     }
 })
