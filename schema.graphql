@@ -2,6 +2,15 @@
 ### Do not make changes to this file directly
 
 
+type Auth {
+  token: String
+  user_identity: UserIdentity
+}
+
+type Mutation {
+  login(email: String, password: String): Auth
+}
+
 interface Node {
   """unique identifier for the resource"""
   id: ID

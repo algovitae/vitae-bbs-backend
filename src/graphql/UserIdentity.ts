@@ -1,4 +1,4 @@
-import { extendType, objectType, queryType, stringArg } from "nexus"
+import { extendType, mutationType, objectType, queryType, stringArg } from "nexus"
 import { Node } from "./Node"
 import { User } from "./User"
 
