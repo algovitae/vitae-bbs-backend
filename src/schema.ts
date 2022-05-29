@@ -1,39 +1,12 @@
 import { interfaceType, makeSchema, objectType, queryType } from "nexus";
 import { join } from "path";
+import { User } from "./graphql/User";
+import { UserIdentity, UserIdentityQuery } from "./graphql/UserIdentity";
 
 // TODO: relationなどを明確にする
 // TODO: PK,SKの組み合わせの場合にどうするべきか考える
 
-// const Node = interfaceType({
-//     name: 'Node',
-//     definition(t) {
-//         t.id('id', { description: 'unique identifier for the resource' })
-//     },
-// })
 
-// const User = objectType({
-//     name: 'User',
-//     isTypeOf(source) {
-//         return 'user_name' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string('user_name')
-//     }
-// })
-
-// const UserIdentity = objectType({
-//     name: "UserIdentity",
-//     isTypeOf(source) {
-//         return 'email' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string('user_id')
-//         t.string('email')
-//         t.string('password_hash')
-//     }
-// })
 
 // const Group = objectType({
 //     name: "Group",
@@ -89,8 +62,9 @@ import { join } from "path";
 
 export const schema = makeSchema({
     types: {
-        // User,
-        // UserIdentity,
+        User,
+        UserIdentity,
+        UserIdentityQuery
         // Group,
         // Membership,
         // Thread,

@@ -2,6 +2,26 @@
 ### Do not make changes to this file directly
 
 
+interface Node {
+  """unique identifier for the resource"""
+  id: ID
+}
+
 type Query {
-  ok: Boolean!
+  userIdentityByEmail(email: String): UserIdentity
+}
+
+type User implements Node {
+  """unique identifier for the resource"""
+  id: ID
+  user_name: String
+}
+
+type UserIdentity implements Node {
+  email: String
+
+  """unique identifier for the resource"""
+  id: ID
+  password_hash: String
+  user_id: String
 }
