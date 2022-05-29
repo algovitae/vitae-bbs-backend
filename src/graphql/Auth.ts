@@ -22,7 +22,7 @@ export const AuthMutation = mutationType({
                 password: stringArg(),
             },
             async resolve(source, args, context) {
-                const userIdentity = await userIdentityStore.get(args.email).exec()
+                const userIdentity = await context.userIdentityStore.get(args.email).exec()
                 if (!userIdentity) {
                     return null
                 }

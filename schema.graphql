@@ -17,7 +17,7 @@ interface Node {
 }
 
 type Query {
-  userIdentityByEmail(email: String): UserIdentity
+  ok: Boolean!
 }
 
 type User implements Node {

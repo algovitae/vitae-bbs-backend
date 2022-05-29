@@ -4,7 +4,7 @@
  */
 
 
-
+import type { AppContext } from "./src/graphql/context/AppContext"
 
 
 
@@ -66,7 +66,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['Auth'] | null; // Auth
   }
   Query: { // field return type
-    userIdentityByEmail: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
+    ok: boolean; // Boolean!
   }
   User: { // field return type
     id: string | null; // ID
@@ -93,7 +93,7 @@ export interface NexusGenFieldTypeNames {
     login: 'Auth'
   }
   Query: { // field return type name
-    userIdentityByEmail: 'UserIdentity'
+    ok: 'Boolean'
   }
   User: { // field return type name
     id: 'ID'
@@ -116,11 +116,6 @@ export interface NexusGenArgTypes {
     login: { // args
       email?: string | null; // String
       password?: string | null; // String
-    }
-  }
-  Query: {
-    userIdentityByEmail: { // args
-      email?: string | null; // String
     }
   }
 }
@@ -159,7 +154,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: AppContext;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

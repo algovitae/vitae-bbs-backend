@@ -62,16 +62,17 @@ import { UserIdentity, UserIdentityQuery } from "./graphql/UserIdentity";
 // })
 
 export const schema = makeSchema({
-    types: {
-        AuthMutation,
-        User,
-        UserIdentity,
-        UserIdentityQuery
-        // Group,
-        // Membership,
-        // Thread,
-        // ThreadComment
-    },
+  types: {
+    AuthMutation,
+    User,
+    UserIdentity,
+    UserIdentityQuery
+    // Group,
+    // Membership,
+    // Thread,
+    // ThreadComment
+  },
+  contextType: { module: join(__dirname, 'graphql', 'context', 'AppContext.ts'), export: 'AppContext' },
   outputs: {
     typegen: join(__dirname, '..', 'nexus-typegen.ts'),
     schema: join(__dirname, '..', 'schema.graphql'),
