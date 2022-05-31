@@ -1,6 +1,7 @@
 import { fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType } from "nexus";
 import { join } from "path";
 import { AuthMutation, MeQuery } from "./graphql/Auth";
+import { Group, GroupMutation } from "./graphql/Group";
 import { User, UserQuery } from "./graphql/User";
 import { UserIdentity } from "./graphql/UserIdentity";
 
@@ -68,7 +69,8 @@ export const schema = makeSchema({
     User,
     UserQuery,
     UserIdentity,
-    // Group,
+    Group,
+    GroupMutation,
     // Membership,
     // Thread,
     // ThreadComment

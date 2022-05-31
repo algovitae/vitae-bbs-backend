@@ -1,6 +1,7 @@
 import { compare } from "bcrypt"
 import { extendType, mutationType, objectType, queryType, stringArg } from "nexus"
 import { userIdentityStore } from "../ddb/UserIdentity"
+import { Mutation } from "./Mutation"
 import { Query } from "./Query"
 import { UserIdentity } from "./UserIdentity"
 
@@ -14,7 +15,8 @@ export const Auth = objectType({
     }
 })
 
-export const AuthMutation = mutationType({
+export const AuthMutation = extendType({
+    type: Mutation.name,
     definition(t) {
         t.field("login", {
             type: Auth,

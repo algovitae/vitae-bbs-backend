@@ -80,6 +80,7 @@ export interface NexusGenFieldTypes {
     user_id: string; // String!
   }
   Mutation: { // field return type
+    createGroup: NexusGenRootTypes['Group'] | null; // Group
     login: NexusGenRootTypes['Auth'] | null; // Auth
   }
   Query: { // field return type
@@ -115,6 +116,7 @@ export interface NexusGenFieldTypeNames {
     user_id: 'String'
   }
   Mutation: { // field return type name
+    createGroup: 'Group'
     login: 'Auth'
   }
   Query: { // field return type name
@@ -136,6 +138,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createGroup: { // args
+      group_name: string; // String!
+      memberships: string[]; // [String!]!
+    }
     login: { // args
       email?: string | null; // String
       password?: string | null; // String
