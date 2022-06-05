@@ -4,7 +4,7 @@
  */
 
 
-import type { AppContext } from "./src/graphql/context/AppContext"
+import type { AppContext } from "./src/graphql/context/app-context"
 import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 
 

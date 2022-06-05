@@ -1,14 +1,13 @@
-import { fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType } from "nexus";
-import { join } from "path";
-import { AuthMutation, MeQuery } from "./graphql/Auth";
-import { Group, GroupMutation } from "./graphql/Group";
-import { User, UserQuery } from "./graphql/User";
-import { UserIdentity } from "./graphql/UserIdentity";
+import path, {join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType} from 'nexus';
+import {AuthMutation, MeQuery} from './graphql/auth';
+import {Group, GroupMutation} from './graphql/group';
+import {User, UserQuery} from './graphql/user';
+import {UserIdentity} from './graphql/user-identity';
 
 // TODO: relationなどを明確にする
 // TODO: PK,SKの組み合わせの場合にどうするべきか考える
-
-
 
 // const Group = objectType({
 //     name: "Group",
@@ -32,7 +31,6 @@ import { UserIdentity } from "./graphql/UserIdentity";
 //         t.string("user_id")
 //     }
 // })
-
 
 // const Thread = objectType({
 //     name: "Thread",
@@ -75,12 +73,16 @@ export const schema = makeSchema({
     // Thread,
     // ThreadComment
   },
-  contextType: { module: join(__dirname, 'graphql', 'context', 'AppContext.ts'), export: 'AppContext' },
+  // eslint-disable-next-line unicorn/prefer-module
+  contextType: {module: join(__dirname, 'graphql', 'context', 'app-context.ts'), export: 'AppContext'},
   plugins: [
-    fieldAuthorizePlugin()
+    fieldAuthorizePlugin(),
   ],
   outputs: {
+    // eslint-disable-next-line unicorn/prefer-module
     typegen: join(__dirname, '..', 'nexus-typegen.ts'),
+    // eslint-disable-next-line unicorn/prefer-module
     schema: join(__dirname, '..', 'schema.graphql'),
   },
-})
+});
+
