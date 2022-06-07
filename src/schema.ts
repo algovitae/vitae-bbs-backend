@@ -2,7 +2,7 @@ import path, {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType} from 'nexus';
 import {AuthMutation, MeQuery} from './graphql/auth';
-import {Group, GroupMutation} from './graphql/group';
+import {Group, GroupMutation, GroupQuery} from './graphql/group';
 import {User, UserQuery} from './graphql/user';
 import {UserIdentity} from './graphql/user-identity';
 
@@ -68,6 +68,7 @@ export const schema = makeSchema({
     UserQuery,
     UserIdentity,
     Group,
+    GroupQuery,
     GroupMutation,
     // Membership,
     // Thread,

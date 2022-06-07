@@ -6,12 +6,39 @@ import {GroupModel} from '../ddb/group';
 import {MembershipModel} from '../ddb/membrtship';
 import {Mutation} from './mutation';
 import {Query} from './query';
+import {Thread} from './thread';
 
 export const Group = objectType({
   name: 'Group',
   definition(t) {
     t.nonNull.id('group_id');
     t.nonNull.string('group_name');
+    t.nonNull.field('threads', {
+      type: nonNull(list(nonNull(Thread))),
+      async resolve(source, args, context) {
+        const threads = await context.threadStore.query().wherePartitionKey(source.group_id).exec();
+        return threads;
+      },
+    });
+  },
+});
+
+export const GroupQuery = extendType({
+  type: Query.name,
+  definition(t) {
+    t.nullable.field('group', {
+      type: Group,
+      args: {
+        group_id: nonNull(stringArg()),
+      },
+      async authorize(root, args, context) {
+        return context.authSource.canViewGroup(args.group_id);
+      },
+      async resolve(source, args, context) {
+        const group = await context.groupDataLoader.load(args.group_id);
+        return group;
+      },
+    });
   },
 });
 

@@ -43,6 +43,11 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  Thread: { // root type
+    group_id: string; // ID!
+    thread_id: string; // ID!
+    thread_name: string; // String!
+  }
   User: { // root type
     user_id: string; // ID!
     user_name: string; // String!
@@ -72,6 +77,7 @@ export interface NexusGenFieldTypes {
   Group: { // field return type
     group_id: string; // ID!
     group_name: string; // String!
+    threads: NexusGenRootTypes['Thread'][]; // [Thread!]!
   }
   Membership: { // field return type
     group: NexusGenRootTypes['Group']; // Group!
@@ -85,7 +91,13 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
+    group: NexusGenRootTypes['Group'] | null; // Group
     userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
+  }
+  Thread: { // field return type
+    group_id: string; // ID!
+    thread_id: string; // ID!
+    thread_name: string; // String!
   }
   User: { // field return type
     memberships: NexusGenRootTypes['Membership'][]; // [Membership!]!
@@ -108,6 +120,7 @@ export interface NexusGenFieldTypeNames {
   Group: { // field return type name
     group_id: 'ID'
     group_name: 'String'
+    threads: 'Thread'
   }
   Membership: { // field return type name
     group: 'Group'
@@ -121,7 +134,13 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     allUsers: 'User'
+    group: 'Group'
     userIdentityByAuthorization: 'UserIdentity'
+  }
+  Thread: { // field return type name
+    group_id: 'ID'
+    thread_id: 'ID'
+    thread_name: 'String'
   }
   User: { // field return type name
     memberships: 'Membership'
@@ -145,6 +164,11 @@ export interface NexusGenArgTypes {
     login: { // args
       email?: string | null; // String
       password?: string | null; // String
+    }
+  }
+  Query: {
+    group: { // args
+      group_id: string; // String!
     }
   }
 }

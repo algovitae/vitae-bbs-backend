@@ -10,6 +10,7 @@ type Auth {
 type Group {
   group_id: ID!
   group_name: String!
+  threads: [Thread!]!
 }
 
 type Membership {
@@ -26,7 +27,14 @@ type Mutation {
 
 type Query {
   allUsers: [User!]!
+  group(group_id: String!): Group
   userIdentityByAuthorization: UserIdentity
+}
+
+type Thread {
+  group_id: ID!
+  thread_id: ID!
+  thread_name: String!
 }
 
 type User {

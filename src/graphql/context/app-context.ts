@@ -1,5 +1,6 @@
 import {groupDataLoaderFactory, groupStore} from '../../ddb/group';
 import {membershipStore} from '../../ddb/membrtship';
+import {threadDataLoaderFactory, threadStore} from '../../ddb/thread';
 import {userDataLoaderFactory, userStore} from '../../ddb/user';
 import {userIdentityStore} from '../../ddb/user-identity';
 // eslint-disable-next-line import/no-cycle
@@ -31,6 +32,14 @@ export class AppContext {
 
   get groupDataLoader() {
     return groupDataLoaderFactory(this.groupStore);
+  }
+
+  get threadStore() {
+    return threadStore;
+  }
+
+  get threadDataLoader() {
+    return threadDataLoaderFactory(this.threadStore);
   }
 
   get membershipStore() {

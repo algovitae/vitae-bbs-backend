@@ -29,4 +29,8 @@ export class AuthSource {
   async canViewAllUsers() {
     return this.isAuthorized();
   }
+
+  async canViewGroup(_group_id: string) {
+    return this.isAuthorized(); // FIXME
+  }
 }
