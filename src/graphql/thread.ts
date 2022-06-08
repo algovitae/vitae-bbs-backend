@@ -1,5 +1,6 @@
-import {list, nonNull, objectType} from 'nexus';
-// eslint-disable-next-line import/no-cycle
+import {extendType, list, nonNull, objectType, stringArg} from 'nexus';
+import {Query} from './query';
+
 import {ThreadComment} from './thread-comment';
 
 export const Thread = objectType({
@@ -15,6 +16,26 @@ export const Thread = objectType({
       },
       async resolve(source, args, context) {
         return context.threadCommentStore.query().wherePartitionKey(source.thread_id).exec();
+      },
+    });
+  },
+});
+
+export const ThreadQuery = extendType({
+  type: Query.name,
+  definition(t) {
+    t.nullable.field('thread', {
+      type: Thread,
+      args: {
+        group_id: nonNull(stringArg()),
+        thread_id: nonNull(stringArg()),
+      },
+      async authorize(root, args, context) {
+        return context.authSource.canViewGroup(args.group_id);
+      },
+      async resolve(source, args, context) {
+        const thread = await context.threadDataLoader.load(args);
+        return thread!;
       },
     });
   },

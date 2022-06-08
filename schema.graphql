@@ -28,6 +28,7 @@ type Mutation {
 type Query {
   allUsers: [User!]!
   group(group_id: String!): Group
+  thread(group_id: String!, thread_id: String!): Thread
   userIdentityByAuthorization: UserIdentity
 }
 

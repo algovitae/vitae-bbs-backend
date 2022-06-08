@@ -1,3 +1,4 @@
+import {kill} from 'node:process';
 import {nonNull, objectType} from 'nexus';
 import {User} from './user';
 
@@ -10,8 +11,13 @@ export const ThreadComment = objectType({
     t.nonNull.string('body');
     t.nonNull.field('commented_by', {
       type: nonNull(User),
+      async authorize(root, args, context) {
+        return context.authSource.isAuthorized();
+      },
       async resolve(source, args, context) {
-        return context.userDataLoader.load(source.commented_by);
+        const comment = (await context.threadCommentDataLoader.load(source))!;
+        const user = await context.userDataLoader.load(comment.commented_by);
+        return user!;
       },
     });
     t.nonNull.string('commented_at');

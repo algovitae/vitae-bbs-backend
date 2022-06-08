@@ -99,6 +99,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
     group: NexusGenRootTypes['Group'] | null; // Group
+    thread: NexusGenRootTypes['Thread'] | null; // Thread
     userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
   Thread: { // field return type
@@ -151,6 +152,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     allUsers: 'User'
     group: 'Group'
+    thread: 'Thread'
     userIdentityByAuthorization: 'UserIdentity'
   }
   Thread: { // field return type name
@@ -194,6 +196,10 @@ export interface NexusGenArgTypes {
   Query: {
     group: { // args
       group_id: string; // String!
+    }
+    thread: { // args
+      group_id: string; // String!
+      thread_id: string; // String!
     }
   }
 }

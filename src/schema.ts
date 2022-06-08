@@ -5,6 +5,7 @@ import {AuthMutation, MeQuery} from './graphql/auth';
 import {Group, GroupMutation, GroupQuery} from './graphql/group';
 import {User, UserQuery} from './graphql/user';
 import {UserIdentity} from './graphql/user-identity';
+import {ThreadQuery} from './graphql/thread';
 
 // TODO: relationなどを明確にする
 // TODO: PK,SKの組み合わせの場合にどうするべきか考える
@@ -72,6 +73,7 @@ export const schema = makeSchema({
     GroupMutation,
     // Membership,
     // Thread,
+    ThreadQuery,
     // ThreadComment
   },
   // eslint-disable-next-line unicorn/prefer-module

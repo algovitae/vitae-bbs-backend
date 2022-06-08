@@ -2,7 +2,7 @@ import {resolve} from 'node:path';
 import {extendType, list, nonNull, objectType, queryType} from 'nexus';
 import {Group} from './group';
 import {Query} from './query';
-// eslint-disable-next-line import/no-cycle
+
 import {User} from './user';
 
 export const Membership = objectType({
@@ -15,7 +15,7 @@ export const Membership = objectType({
       type: nonNull(User),
       async resolve(source, args, context) {
         const dataloader = context.userDataLoader;
-        return dataloader.load(source.user_id);
+        return (await dataloader.load(source.user_id))!;
       },
     });
 
@@ -23,7 +23,7 @@ export const Membership = objectType({
       type: nonNull(Group),
       async resolve(source, args, context) {
         const dataloader = context.groupDataLoader;
-        return dataloader.load(source.group_id);
+        return (await dataloader.load(source.group_id))!;
       },
     });
   },

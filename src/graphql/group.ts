@@ -36,7 +36,7 @@ export const GroupQuery = extendType({
       },
       async resolve(source, args, context) {
         const group = await context.groupDataLoader.load(args.group_id);
-        return group;
+        return group!;
       },
     });
   },

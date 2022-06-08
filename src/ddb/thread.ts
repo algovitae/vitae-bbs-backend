@@ -1,5 +1,6 @@
 import {DynamoStore, Model, PartitionKey, Property, SortKey} from '@shiftcoders/dynamo-easy';
 import DataLoader from 'dataloader';
+import {uniq} from 'rambda';
 import {ddbTableSuffix} from './table-suffix';
 
 @Model({
@@ -18,14 +19,17 @@ export class ThreadModel {
 
 export const threadStore = new DynamoStore(ThreadModel);
 
-const weakmap = new WeakMap<DynamoStore<ThreadModel>, DataLoader<string, ThreadModel, string>>();
+const weakmap = new WeakMap<DynamoStore<ThreadModel>, DataLoader<{group_id: string; thread_id: string}, ThreadModel | undefined, {group_id: string; thread_id: string}>>();
 export const threadDataLoaderFactory = (threadStore: DynamoStore<ThreadModel>) => {
   const cached = weakmap.get(threadStore);
   if (cached) {
     return cached;
   }
 
-  const loader = new DataLoader(async (thread_ids: readonly string[]) => threadStore.batchGet(thread_ids.map(thread_id => ({thread_id}))).exec(), {
+  const loader = new DataLoader(async (ids: ReadonlyArray<{group_id: string; thread_id: string}>) => {
+    const retrieved = await threadStore.batchGet(uniq([...ids])).exec();
+    return ids.map(id => retrieved.find(r => r.group_id === id.group_id && r.thread_id === id.thread_id));
+  }, {
     cache: false,
     maxBatchSize: 100,
   });

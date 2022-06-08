@@ -9,6 +9,7 @@ module.exports = {
       "@typescript-eslint/no-implicit-any-catch": "off",
       "@typescript-eslint/naming-convention": "off", // FIXME
       "import/extensions": "off",
+      "import/no-cycle": "off",
       "new-cap": "off",
       "unicorn/no-array-for-each": "off",
       "unicorn/no-await-expression-member": "off",
