@@ -32,9 +32,19 @@ type Query {
 }
 
 type Thread {
+  comments: [ThreadComment!]!
   group_id: ID!
   thread_id: ID!
   thread_name: String!
+}
+
+type ThreadComment {
+  body: String!
+  comment_id: ID!
+  commented_at: String!
+  commented_by: User!
+  thread_id: ID!
+  title: String!
 }
 
 type User {

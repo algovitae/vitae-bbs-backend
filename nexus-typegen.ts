@@ -48,6 +48,13 @@ export interface NexusGenObjects {
     thread_id: string; // ID!
     thread_name: string; // String!
   }
+  ThreadComment: { // root type
+    body: string; // String!
+    comment_id: string; // ID!
+    commented_at: string; // String!
+    thread_id: string; // ID!
+    title: string; // String!
+  }
   User: { // root type
     user_id: string; // ID!
     user_name: string; // String!
@@ -95,9 +102,18 @@ export interface NexusGenFieldTypes {
     userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
   }
   Thread: { // field return type
+    comments: NexusGenRootTypes['ThreadComment'][]; // [ThreadComment!]!
     group_id: string; // ID!
     thread_id: string; // ID!
     thread_name: string; // String!
+  }
+  ThreadComment: { // field return type
+    body: string; // String!
+    comment_id: string; // ID!
+    commented_at: string; // String!
+    commented_by: NexusGenRootTypes['User']; // User!
+    thread_id: string; // ID!
+    title: string; // String!
   }
   User: { // field return type
     memberships: NexusGenRootTypes['Membership'][]; // [Membership!]!
@@ -138,9 +154,18 @@ export interface NexusGenFieldTypeNames {
     userIdentityByAuthorization: 'UserIdentity'
   }
   Thread: { // field return type name
+    comments: 'ThreadComment'
     group_id: 'ID'
     thread_id: 'ID'
     thread_name: 'String'
+  }
+  ThreadComment: { // field return type name
+    body: 'String'
+    comment_id: 'ID'
+    commented_at: 'String'
+    commented_by: 'User'
+    thread_id: 'ID'
+    title: 'String'
   }
   User: { // field return type name
     memberships: 'Membership'

@@ -1,6 +1,8 @@
 import {LogInfo, updateDynamoEasyConfig} from '@shiftcoders/dynamo-easy';
 import {groupStore} from '../ddb/group';
 import {membershipStore} from '../ddb/membrtship';
+import {threadStore} from '../ddb/thread';
+import {threadCommentStore} from '../ddb/thread-comment';
 import {userStore} from '../ddb/user';
 import {userIdentityStore} from '../ddb/user-identity';
 
@@ -46,6 +48,36 @@ async function seed() {
   await membershipStore.put({
     user_id: '29onBfWqwv90Dvlaszo0mWUSJ6x',
     group_id: '29pqLK8mTT2Bwcqq9NCKSoU10s4',
+  }).exec();
+
+  await threadStore.put({
+    group_id: '29pq9NeBysRopKer9QfBcNijQEe',
+    thread_id: '2AH8DPDhp5g5sVbUDED1toWI0dy',
+    thread_name: 'スレッド名AA',
+  }).exec();
+
+  await threadStore.put({
+    group_id: '29pq9NeBysRopKer9QfBcNijQEe',
+    thread_id: '2AH8DPDhp5g5sVbUDED1toWI0dy',
+    thread_name: 'スレッド名AA',
+  }).exec();
+
+  await threadCommentStore.put({
+    thread_id: '2AH8DPDhp5g5sVbUDED1toWI0dy',
+    comment_id: '2AHBUJZ6P5Rsac1pVuHrEnh85u0',
+    title: 'title 1',
+    body: 'hello',
+    commented_by: '29onBfWqwv90Dvlaszo0mWUSJ6x',
+    commented_at: '2022-06-08T02:50:10+0000',
+  }).exec();
+
+  await threadCommentStore.put({
+    thread_id: '2AH8DPDhp5g5sVbUDED1toWI0dy',
+    comment_id: '2AHBYbn51jRfBMYWHtp23D0fWQo',
+    title: 'title 2',
+    body: 'world',
+    commented_by: '29onBfWqwv90Dvlaszo0mWUSJ6x',
+    commented_at: '2022-06-08T02:50:20+0000',
   }).exec();
 
   console.log('seeded');

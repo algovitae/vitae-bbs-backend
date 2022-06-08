@@ -19,8 +19,8 @@ export class ThreadModel {
 export const threadStore = new DynamoStore(ThreadModel);
 
 const weakmap = new WeakMap<DynamoStore<ThreadModel>, DataLoader<string, ThreadModel, string>>();
-export const threadDataLoaderFactory = (groupStore: DynamoStore<ThreadModel>) => {
-  const cached = weakmap.get(groupStore);
+export const threadDataLoaderFactory = (threadStore: DynamoStore<ThreadModel>) => {
+  const cached = weakmap.get(threadStore);
   if (cached) {
     return cached;
   }
