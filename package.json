@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@shiftcoders/dynamo-easy": "^7.1.0",
+    "@vendia/serverless-express": "^4.8.2",
     "apollo-server": "^3.8.1",
+    "apollo-server-lambda": "^3.8.2",
     "bcrypt": "^5.0.1",
     "dataloader": "^2.1.0",
     "graphql": "^16.5.0",

@@ -313,6 +313,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/aws-lambda@^8.10.76":
+  version "8.10.99"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.99.tgz#14fb91e5ee54d517f5b3209b027edddee9900ba6"
+  integrity sha512-BLlr4HGGF9Ga5vvZumpuXuyFUIhnCZsOdjPWy/iCJi+NIYAw30jA3XC5tyVf2RfaXm5thMR2SC3DosDVIMhM5g==
+
 "@types/bcrypt@^5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-5.0.0.tgz#a835afa2882d165aff5690893db314eaa98b9f20"
@@ -525,6 +530,11 @@
     "@typescript-eslint/types" "5.27.0"
     eslint-visitor-keys "^3.3.0"
 
+"@vendia/serverless-express@^4.3.9", "@vendia/serverless-express@^4.8.2":
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/@vendia/serverless-express/-/serverless-express-4.8.2.tgz#002a4530397978b9feb012484be0a63d74a31333"
+  integrity sha512-biv23HiYXZFe7ULKFIkdYLWtc07yN/iGMq9fg00nfbVqWeJvtfEubUimnhPwoR7I+kAm9ZDhuOBjMFjKmLPQzA==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -654,6 +664,34 @@ apollo-server-core@^3.8.1:
     uuid "^8.0.0"
     whatwg-mimetype "^3.0.0"
 
+apollo-server-core@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-3.8.2.tgz#a065e00220d6c709b11b824197520adee6d897d2"
+  integrity sha512-cbzG928HG27W+juMVCIL1O//iyAj/Q2hnOu6YwrGrcqeE75ZIJSgSBm/gPHK20cI7nEjK2IWACx8Hj1nGAQ5Zg==
+  dependencies:
+    "@apollo/utils.logger" "^1.0.0"
+    "@apollo/utils.usagereporting" "^1.0.0"
+    "@apollographql/apollo-tools" "^0.5.3"
+    "@apollographql/graphql-playground-html" "1.6.29"
+    "@graphql-tools/mock" "^8.1.2"
+    "@graphql-tools/schema" "^8.0.0"
+    "@josephg/resolvable" "^1.0.0"
+    apollo-datasource "^3.3.1"
+    apollo-reporting-protobuf "^3.3.1"
+    apollo-server-caching "^3.3.0"
+    apollo-server-env "^4.2.1"
+    apollo-server-errors "^3.3.1"
+    apollo-server-plugin-base "^3.6.0"
+    apollo-server-types "^3.6.0"
+    async-retry "^1.2.1"
+    fast-json-stable-stringify "^2.1.0"
+    graphql-tag "^2.11.0"
+    loglevel "^1.6.8"
+    lru-cache "^6.0.0"
+    sha.js "^2.4.11"
+    uuid "^8.0.0"
+    whatwg-mimetype "^3.0.0"
+
 apollo-server-env@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/apollo-server-env/-/apollo-server-env-4.2.1.tgz#ea5b1944accdbdba311f179e4dfaeca482c20185"
@@ -682,6 +720,34 @@ apollo-server-express@^3.8.1:
     body-parser "^1.19.0"
     cors "^2.8.5"
     parseurl "^1.3.3"
+
+apollo-server-express@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-3.8.2.tgz#51285279f8a52eb7d88a4f4145261b6f69b12ba6"
+  integrity sha512-UIpjs0qwOGJ0U1IokrtfjgpQVoirr7E1w446mx6B0EqV8sIFgdEE253utxtHi80va37h/xuEIUuAZFRQaY6ClQ==
+  dependencies:
+    "@types/accepts" "^1.3.5"
+    "@types/body-parser" "1.19.2"
+    "@types/cors" "2.8.12"
+    "@types/express" "4.17.13"
+    "@types/express-serve-static-core" "4.17.28"
+    accepts "^1.3.5"
+    apollo-server-core "^3.8.2"
+    apollo-server-types "^3.6.0"
+    body-parser "^1.19.0"
+    cors "^2.8.5"
+    parseurl "^1.3.3"
+
+apollo-server-lambda@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-3.8.2.tgz#97cf756d364f1a976ac137a35a88e8db127f0c54"
+  integrity sha512-8KWp/YYM9yctWwAv0oMERKHM91MQmpJCOnS1TykWC4p1JwrSgt1vln9TJK5FRCD4rFGgSlPvhc3TItXjdDVVAw==
+  dependencies:
+    "@types/aws-lambda" "^8.10.76"
+    "@vendia/serverless-express" "^4.3.9"
+    apollo-server-core "^3.8.2"
+    apollo-server-express "^3.8.2"
+    express "^4.17.1"
 
 apollo-server-plugin-base@^3.6.0:
   version "3.6.0"

@@ -77,15 +77,15 @@ export const schema = makeSchema({
     // ThreadComment
   },
   // eslint-disable-next-line unicorn/prefer-module
-  contextType: {module: join(__dirname, 'graphql', 'context', 'app-context.ts'), export: 'AppContext'},
+  contextType: {module: join(__dirname, 'graphql', 'context', 'app-context.js'), export: 'AppContext'},
   plugins: [
     fieldAuthorizePlugin(),
   ],
-  outputs: {
-    // eslint-disable-next-line unicorn/prefer-module
-    typegen: join(__dirname, '..', 'nexus-typegen.ts'),
-    // eslint-disable-next-line unicorn/prefer-module
-    schema: join(__dirname, '..', 'schema.graphql'),
-  },
+  // outputs: {
+  //   // eslint-disable-next-line unicorn/prefer-module
+  //   typegen: join(__dirname, '..', 'nexus-typegen.ts'),
+  //   // eslint-disable-next-line unicorn/prefer-module
+  //   schema: join(__dirname, '..', 'schema.graphql'),
+  // },
 });
 
