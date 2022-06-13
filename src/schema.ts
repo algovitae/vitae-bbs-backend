@@ -7,59 +7,8 @@ import {User, UserQuery} from './graphql/user';
 import {UserIdentity} from './graphql/user-identity';
 import {ThreadQuery} from './graphql/thread';
 
-// TODO: relationなどを明確にする
-// TODO: PK,SKの組み合わせの場合にどうするべきか考える
-
-// const Group = objectType({
-//     name: "Group",
-//     isTypeOf(source) {
-//         return 'group_name' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string("group_name")
-//     }
-// })
-
-// const Membership = objectType({
-//     name: "Membership",
-//     isTypeOf(source) {
-//         return 'user_id' in source && 'group_id' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string("group_id")
-//         t.string("user_id")
-//     }
-// })
-
-// const Thread = objectType({
-//     name: "Thread",
-//     isTypeOf(source) {
-//         return 'theread_name' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string("group_id")
-//         t.string("thread_id")
-//         t.string("thread_name")
-//     }
-// })
-
-// const ThreadComment = objectType({
-//     name: "ThreadComment",
-//     isTypeOf(source) {
-//         return 'comment_id' in source
-//     },
-//     definition(t) {
-//         t.implements(Node)
-//         t.string("thread_id")
-//         t.string("comment_id")
-//         t.string("title")
-//         t.string("body")
-//         t.string("comment_by")
-//     }
-// })
+const isLambda = !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const isTsNode = !!process.env.TS_NODE_DEV;
 
 export const schema = makeSchema({
   types: {
@@ -77,15 +26,16 @@ export const schema = makeSchema({
     // ThreadComment
   },
   // eslint-disable-next-line unicorn/prefer-module
-  contextType: {module: join(__dirname, 'graphql', 'context', 'app-context.js'), export: 'AppContext'},
+  contextType: {module: join(__dirname, 'graphql', 'context', isTsNode ? 'app-context.ts' : 'app-context.js'), export: 'AppContext'},
   plugins: [
     fieldAuthorizePlugin(),
   ],
-  // outputs: {
-  //   // eslint-disable-next-line unicorn/prefer-module
-  //   typegen: join(__dirname, '..', 'nexus-typegen.ts'),
-  //   // eslint-disable-next-line unicorn/prefer-module
-  //   schema: join(__dirname, '..', 'schema.graphql'),
-  // },
+  // MEMO: AWS Lambda上ではファイル生成をさせない
+  outputs: isLambda ? undefined : {
+    // eslint-disable-next-line unicorn/prefer-module
+    typegen: join(__dirname, '..', 'nexus-typegen.ts'),
+    // eslint-disable-next-line unicorn/prefer-module
+    schema: join(__dirname, '..', 'schema.graphql'),
+  },
 });
 
