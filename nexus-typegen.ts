@@ -93,7 +93,11 @@ export interface NexusGenFieldTypes {
     user_id: string; // String!
   }
   Mutation: { // field return type
+    addMembership: NexusGenRootTypes['Membership'] | null; // Membership
     createGroup: NexusGenRootTypes['Group'] | null; // Group
+    createThread: NexusGenRootTypes['Thread'] | null; // Thread
+    createThreadComment: NexusGenRootTypes['ThreadComment'] | null; // ThreadComment
+    deleteMembership: NexusGenRootTypes['Group'] | null; // Group
     login: NexusGenRootTypes['Auth'] | null; // Auth
   }
   Query: { // field return type
@@ -146,7 +150,11 @@ export interface NexusGenFieldTypeNames {
     user_id: 'String'
   }
   Mutation: { // field return type name
+    addMembership: 'Membership'
     createGroup: 'Group'
+    createThread: 'Thread'
+    createThreadComment: 'ThreadComment'
+    deleteMembership: 'Group'
     login: 'Auth'
   }
   Query: { // field return type name
@@ -184,9 +192,27 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addMembership: { // args
+      group_id: string; // String!
+      user_id: string; // String!
+    }
     createGroup: { // args
       group_name: string; // String!
       memberships: string[]; // [String!]!
+    }
+    createThread: { // args
+      group_id: string; // String!
+      thread_name: string; // String!
+    }
+    createThreadComment: { // args
+      body: string; // String!
+      group_id: string; // String!
+      thread_id: string; // String!
+      title: string; // String!
+    }
+    deleteMembership: { // args
+      group_id: string; // String!
+      user_id: string; // String!
     }
     login: { // args
       email?: string | null; // String

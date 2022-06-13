@@ -1,4 +1,7 @@
+import ksuid from 'ksuid';
 import {extendType, list, nonNull, objectType, stringArg} from 'nexus';
+import { ThreadModel } from '../ddb/thread';
+import { Mutation } from './mutation';
 import {Query} from './query';
 
 import {ThreadComment} from './thread-comment';
@@ -36,6 +39,32 @@ export const ThreadQuery = extendType({
       async resolve(source, args, context) {
         const thread = await context.threadDataLoader.load(args);
         return thread!;
+      },
+    });
+  },
+});
+
+
+export const ThreadMutation = extendType({
+  type: Mutation.name,
+  definition(t) {
+    t.field('createThread', {
+      type: Thread,
+      args: {
+        group_id: nonNull(stringArg()),
+        thread_name: nonNull(stringArg()),
+      },
+      async authorize(root, args, context) {
+        return (context.authSource.canViewGroup(args.group_id));
+      },
+      async resolve(source, args, context) {
+        const item: ThreadModel = {
+          group_id: args.group_id,
+          thread_id:  (await ksuid.random()).toString(),
+          thread_name: args.thread_name
+        }
+        await context.threadStore.put(item).exec();
+        return item;
       },
     });
   },

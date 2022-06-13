@@ -5,7 +5,9 @@ import {AuthMutation, MeQuery} from './graphql/auth';
 import {Group, GroupMutation, GroupQuery} from './graphql/group';
 import {User, UserQuery} from './graphql/user';
 import {UserIdentity} from './graphql/user-identity';
-import {ThreadQuery} from './graphql/thread';
+import {ThreadMutation, ThreadQuery} from './graphql/thread';
+import { ThreadCommentMutation } from './graphql/thread-comment';
+import { MembershipMutation } from './graphql/membership';
 
 const isLambda = !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isTsNode = !!process.env.TS_NODE_DEV;
@@ -20,10 +22,10 @@ export const schema = makeSchema({
     Group,
     GroupQuery,
     GroupMutation,
-    // Membership,
-    // Thread,
+    MembershipMutation,
+    ThreadMutation,
     ThreadQuery,
-    // ThreadComment
+    ThreadCommentMutation
   },
   // eslint-disable-next-line unicorn/prefer-module
   contextType: {module: join(__dirname, 'graphql', 'context', isTsNode ? 'app-context.ts' : 'app-context.js'), export: 'AppContext'},

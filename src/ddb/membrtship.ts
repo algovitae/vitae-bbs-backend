@@ -1,4 +1,4 @@
-import {DynamoStore, GSIPartitionKey, GSISortKey, Model, PartitionKey, Property, Transient} from '@shiftcoders/dynamo-easy';
+import {DynamoStore, GSIPartitionKey, GSISortKey, Model, PartitionKey, Property, SortKey, Transient} from '@shiftcoders/dynamo-easy';
 import DataLoader from 'dataloader';
 import {ddbTableSuffix} from './table-suffix';
 
@@ -11,6 +11,7 @@ export class MembershipModel {
     user_id!: string;
 
   @Property()
+  @SortKey()
   @GSIPartitionKey('group_id_user_id_idx')
     group_id!: string;
 }

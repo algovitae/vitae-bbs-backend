@@ -21,7 +21,11 @@ type Membership {
 }
 
 type Mutation {
+  addMembership(group_id: String!, user_id: String!): Membership
   createGroup(group_name: String!, memberships: [String!]!): Group
+  createThread(group_id: String!, thread_name: String!): Thread
+  createThreadComment(body: String!, group_id: String!, thread_id: String!, title: String!): ThreadComment
+  deleteMembership(group_id: String!, user_id: String!): Group
   login(email: String, password: String): Auth
 }
 
