@@ -1,17 +1,19 @@
-import {extendType, mutationType, nullable, objectType, queryType, stringArg} from 'nexus';
+import {nullable, objectType} from 'nexus';
+import {Node} from './node';
 import {User} from './user';
 
 export const UserIdentity = objectType({
   name: 'UserIdentity',
   definition(t) {
-    t.nonNull.id('email');
-    t.nonNull.string('user_id');
-    t.nonNull.string('password_hash');
+    t.implements(Node);
+    t.nonNull.string('email');
+    t.nonNull.string('userId');
+    t.nonNull.string('passwordHash');
 
     t.field('user', {
       type: nullable(User),
       async resolve(source, _args, context) {
-        return context.userStore.get(source.user_id).exec();
+        return context.userStore.get(source.userId).exec();
       },
     });
   },

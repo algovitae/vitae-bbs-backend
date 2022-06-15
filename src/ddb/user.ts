@@ -1,18 +1,19 @@
 import {DynamoStore, Model, PartitionKey, Property} from '@shiftcoders/dynamo-easy';
 import DataLoader from 'dataloader';
 import {uniq} from 'rambda';
-import {NexusGenFieldTypes, NexusGenObjects} from '../../nexus-typegen';
+import {idMapperFactory, TableNames} from './node';
 import {ddbTableSuffix} from './table-suffix';
 
 @Model({
-  tableName: `User${ddbTableSuffix}`,
+  tableName: `${TableNames.User}${ddbTableSuffix}`,
 })
 export class UserModel {
   @PartitionKey()
-    user_id!: string;
+  @Property({mapper: idMapperFactory(TableNames.User)})
+    id!: string;
 
   @Property()
-    user_name!: string;
+    userName!: string;
 }
 
 export const userStore = new DynamoStore(UserModel);
@@ -24,9 +25,9 @@ export const userDataLoaderFactory = (userStore: DynamoStore<UserModel>) => {
     return cached;
   }
 
-  const loader = new DataLoader(async (user_ids: readonly string[]) => {
-    const retrieved = await userStore.batchGet(uniq([...user_ids]).map(user_id => ({user_id}))).exec();
-    return user_ids.map(u => retrieved.find(r => r.user_id === u));
+  const loader = new DataLoader(async (ids: readonly string[]) => {
+    const retrieved = await userStore.batchGet(uniq([...ids]).map(id => ({id}))).exec();
+    return ids.map(id => retrieved.find(r => r.id === id));
   }, {
     cache: false,
     maxBatchSize: 100,

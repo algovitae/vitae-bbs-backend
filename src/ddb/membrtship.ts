@@ -1,19 +1,27 @@
 import {DynamoStore, GSIPartitionKey, GSISortKey, Model, PartitionKey, Property, SortKey, Transient} from '@shiftcoders/dynamo-easy';
-import DataLoader from 'dataloader';
+import objectHash from 'object-hash';
+import {idMapperFactory, TableNames} from './node';
 import {ddbTableSuffix} from './table-suffix';
 
 @Model({
-  tableName: `Membership${ddbTableSuffix}`,
+  tableName: `${TableNames.Membership}${ddbTableSuffix}`,
 })
 export class MembershipModel {
-  @PartitionKey()
-  @GSISortKey('group_id_user_id_idx')
-    user_id!: string;
+  static combinedId({userId, groupId}: {userId: string; groupId: string}) {
+    return `${userId}:${groupId}`;
+  }
 
-  @Property()
-  @SortKey()
-  @GSIPartitionKey('group_id_user_id_idx')
-    group_id!: string;
+  @PartitionKey()
+  @Property({mapper: idMapperFactory(TableNames.Membership)})
+    id!: string;
+
+  @GSIPartitionKey('userIdIndex')
+  @Property({mapper: idMapperFactory(TableNames.User)})
+    userId!: string;
+
+  @GSIPartitionKey('groupIdIndex')
+  @Property({mapper: idMapperFactory(TableNames.Group)})
+    groupId!: string;
 }
 
 export const membershipStore = new DynamoStore(MembershipModel);

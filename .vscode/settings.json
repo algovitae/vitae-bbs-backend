@@ -3,7 +3,7 @@
     "xo.enable": true,
     "xo.format.enable": true,
     "xo.path": "./node_modules/xo/index.js",
-    "xo.runtime": "/usr/local/share/nvm/versions/node/v16.15.0/bin/node",
+    "xo.runtime": "/usr/local/share/nvm/current/bin/node",
     "[javascript]": {
         "editor.defaultFormatter": "samverschueren.linter-xo"
     },

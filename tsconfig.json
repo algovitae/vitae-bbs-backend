@@ -15,5 +15,11 @@
         "allowSyntheticDefaultImports": true
     },
     "experimentalResolver": true,
-    "experimentalSpecifierResolution": "node"
+    "experimentalSpecifierResolution": "node",
+    "ts-node": {
+        "files": true
+    },
+    "files": [
+        "./nexus-typegen.d.ts",
+    ],
 }

@@ -4,7 +4,6 @@ import {threadDataLoaderFactory, threadStore} from '../../ddb/thread';
 import {threadCommentDataLoaderFactory, threadCommentStore} from '../../ddb/thread-comment';
 import {userDataLoaderFactory, userStore} from '../../ddb/user';
 import {userIdentityStore} from '../../ddb/user-identity';
-// eslint-disable-next-line import/no-cycle
 import {AuthSource} from './auth-source';
 
 export class AppContext {

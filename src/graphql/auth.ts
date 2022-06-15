@@ -1,7 +1,8 @@
 import {Buffer} from 'node:buffer';
 import {compare} from 'bcrypt';
-import {extendType, mutationType, objectType, queryType, stringArg} from 'nexus';
-import {userIdentityStore} from '../ddb/user-identity';
+import {extendType, mutationType, nonNull, nullable, objectType, queryType, stringArg} from 'nexus';
+import {UserIdentityModel, userIdentityStore} from '../ddb/user-identity';
+import {createRawIdFactory, TableNames} from '../ddb/node';
 import {Mutation} from './mutation';
 import {Query} from './query';
 import {UserIdentity} from './user-identity';
@@ -10,7 +11,7 @@ export const Auth = objectType({
   name: 'Auth',
   definition(t) {
     t.string('token');
-    t.field('user_identity', {
+    t.field('userIdentity', {
       type: UserIdentity,
     });
   },
@@ -22,23 +23,31 @@ export const AuthMutation = extendType({
     t.field('login', {
       type: Auth,
       args: {
-        email: stringArg(),
-        password: stringArg(),
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg()),
       },
       async resolve(source, args, context) {
-        const userIdentity = await context.userIdentityStore.get(args.email).exec();
+        console.debug('login attempt', args.email);
+        if (!args.email || !args.password) {
+          return null;
+        }
+
+        const userIdentity = await context.userIdentityStore.get(createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email: args.email}))).exec();
         if (!userIdentity) {
+          console.debug('login attempt failed', 'no user');
           return null;
         }
 
-        const compared = await compare(args.password ?? '', userIdentity.password_hash);
+        const compared = await compare(args.password, userIdentity.passwordHash);
         if (!compared) {
+          console.debug('login attempt failed', 'wrong password');
           return null;
         }
 
+        console.debug('login attempt success', userIdentity);
         return {
-          token: Buffer.from(JSON.stringify({user_id: userIdentity.user_id, email: userIdentity.email})).toString('base64'), // TODO: 署名
-          user_identity: userIdentity,
+          token: Buffer.from(JSON.stringify({userId: userIdentity.userId, email: userIdentity.email})).toString('base64'), // TODO: 署名
+          userIdentity,
         };
       },
     });
@@ -48,12 +57,17 @@ export const AuthMutation = extendType({
 export const MeQuery = extendType({
   type: Query.name,
   definition(t) {
-    t.nullable.field('userIdentityByAuthorization', {
-      type: UserIdentity,
+    t.field('userIdentityByAuthorization', {
+      type: nullable(UserIdentity),
       args: {},
       async resolve(source, args, context) {
         const email = await context.authSource.email();
-        return email ? context.userIdentityStore.get(email).exec() : null;
+        if (!email) {
+          return null;
+        }
+
+        const userIdentity = context.userIdentityStore.get(createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email}))).exec();
+        return userIdentity ?? null;
       },
     });
   },

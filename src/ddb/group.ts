@@ -8,10 +8,10 @@ import {ddbTableSuffix} from './table-suffix';
 })
 export class GroupModel {
   @PartitionKey()
-    group_id!: string;
+    id!: string;
 
   @Property()
-    group_name!: string;
+    groupName!: string;
 }
 
 export const groupStore = new DynamoStore(GroupModel);
@@ -23,9 +23,9 @@ export const groupDataLoaderFactory = (groupStore: DynamoStore<GroupModel>) => {
     return cached;
   }
 
-  const loader = new DataLoader(async (group_ids: readonly string[]) => {
-    const retrieved = await groupStore.batchGet(uniq([...group_ids]).map(group_id => ({group_id}))).exec();
-    return group_ids.map(g => retrieved.find(r => r.group_id === g));
+  const loader = new DataLoader(async (ids: readonly string[]) => {
+    const retrieved = await groupStore.batchGet(uniq([...ids]).map(id => ({id}))).exec();
+    return ids.map(g => retrieved.find(r => r.id === g));
   }, {
     cache: false,
     maxBatchSize: 100,

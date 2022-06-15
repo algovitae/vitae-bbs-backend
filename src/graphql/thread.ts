@@ -1,7 +1,8 @@
-import ksuid from 'ksuid';
 import {extendType, list, nonNull, objectType, stringArg} from 'nexus';
-import { ThreadModel } from '../ddb/thread';
-import { Mutation } from './mutation';
+import {createIdFactory, TableNames} from '../ddb/node';
+import {ThreadModel} from '../ddb/thread';
+import {Mutation} from './mutation';
+import {Node} from './node';
 import {Query} from './query';
 
 import {ThreadComment} from './thread-comment';
@@ -9,16 +10,16 @@ import {ThreadComment} from './thread-comment';
 export const Thread = objectType({
   name: 'Thread',
   definition(t) {
-    t.nonNull.id('group_id');
-    t.nonNull.id('thread_id');
-    t.nonNull.string('thread_name');
+    t.implements(Node);
+    t.nonNull.string('groupId');
+    t.nonNull.string('threadName');
     t.nonNull.field('comments', {
       type: nonNull(list(nonNull(ThreadComment))),
-      async authorize({group_id}, args, context) {
-        return context.authSource.canViewGroup(group_id);
+      async authorize({groupId}, args, context) {
+        return context.authSource.canViewGroup(groupId);
       },
       async resolve(source, args, context) {
-        return context.threadCommentStore.query().wherePartitionKey(source.thread_id).exec();
+        return context.threadCommentStore.query().index('threadIdIndex').wherePartitionKey(source.id).exec();
       },
     });
   },
@@ -30,20 +31,22 @@ export const ThreadQuery = extendType({
     t.nullable.field('thread', {
       type: Thread,
       args: {
-        group_id: nonNull(stringArg()),
-        thread_id: nonNull(stringArg()),
+        id: nonNull(stringArg()),
       },
       async authorize(root, args, context) {
-        return context.authSource.canViewGroup(args.group_id);
+        return context.authSource.canViewThread(args.id);
       },
       async resolve(source, args, context) {
-        const thread = await context.threadDataLoader.load(args);
-        return thread!;
+        const thread = await context.threadDataLoader.load(args.id);
+        if (!thread) {
+          throw new Error('thread not found');
+        }
+
+        return thread;
       },
     });
   },
 });
-
 
 export const ThreadMutation = extendType({
   type: Mutation.name,
@@ -51,18 +54,18 @@ export const ThreadMutation = extendType({
     t.field('createThread', {
       type: Thread,
       args: {
-        group_id: nonNull(stringArg()),
-        thread_name: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
+        threadName: nonNull(stringArg()),
       },
       async authorize(root, args, context) {
-        return (context.authSource.canViewGroup(args.group_id));
+        return (context.authSource.canViewGroup(args.groupId));
       },
       async resolve(source, args, context) {
         const item: ThreadModel = {
-          group_id: args.group_id,
-          thread_id:  (await ksuid.random()).toString(),
-          thread_name: args.thread_name
-        }
+          id: createIdFactory(TableNames.Thread)(),
+          groupId: args.groupId,
+          threadName: args.threadName,
+        };
         await context.threadStore.put(item).exec();
         return item;
       },

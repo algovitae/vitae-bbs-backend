@@ -1,34 +1,37 @@
-import {DynamoStore, Model, PartitionKey, Property, SortKey} from '@shiftcoders/dynamo-easy';
+import {DynamoStore, GSIPartitionKey, Model, PartitionKey, Property, SortKey} from '@shiftcoders/dynamo-easy';
 import DataLoader from 'dataloader';
 import {uniq} from 'rambda';
+import {idMapperFactory, TableNames} from './node';
 import {ddbTableSuffix} from './table-suffix';
 
 @Model({
-  tableName: `Thread${ddbTableSuffix}`,
+  tableName: `${TableNames.Thread}${ddbTableSuffix}`,
 })
 export class ThreadModel {
   @PartitionKey()
-    group_id!: string;
+  @Property({mapper: idMapperFactory(TableNames.Thread)})
+    id!: string;
 
-  @SortKey()
-    thread_id!: string;
+  @GSIPartitionKey('groupIdIndex')
+  @Property({mapper: idMapperFactory(TableNames.Group)})
+    groupId!: string;
 
   @Property()
-    thread_name!: string;
+    threadName!: string;
 }
 
 export const threadStore = new DynamoStore(ThreadModel);
 
-const weakmap = new WeakMap<DynamoStore<ThreadModel>, DataLoader<{group_id: string; thread_id: string}, ThreadModel | undefined, {group_id: string; thread_id: string}>>();
+const weakmap = new WeakMap<DynamoStore<ThreadModel>, DataLoader<string, ThreadModel | undefined, string>>();
 export const threadDataLoaderFactory = (threadStore: DynamoStore<ThreadModel>) => {
   const cached = weakmap.get(threadStore);
   if (cached) {
     return cached;
   }
 
-  const loader = new DataLoader(async (ids: ReadonlyArray<{group_id: string; thread_id: string}>) => {
-    const retrieved = await threadStore.batchGet(uniq([...ids])).exec();
-    return ids.map(id => retrieved.find(r => r.group_id === id.group_id && r.thread_id === id.thread_id));
+  const loader = new DataLoader(async (ids: readonly string[]) => {
+    const retrieved = await threadStore.batchGet(uniq([...ids]).map(id => ({id}))).exec();
+    return ids.map(id => retrieved.find(r => r.id === id));
   }, {
     cache: false,
     maxBatchSize: 100,

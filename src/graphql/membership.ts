@@ -1,23 +1,26 @@
 import {resolve} from 'node:path';
-import {extendType, list, nonNull, objectType, queryType, stringArg} from 'nexus';
+import {extendType, list, nonNull, nullable, objectType, queryType, stringArg} from 'nexus';
+import {MembershipModel} from '../ddb/membrtship';
+import {createRawIdFactory, TableNames} from '../ddb/node';
 import {Group} from './group';
 import {Query} from './query';
 
 import {User} from './user';
-import { Mutation } from './mutation';
-import { MembershipModel } from '../ddb/membrtship';
+import {Mutation} from './mutation';
+import {Node} from './node';
 
 export const Membership = objectType({
   name: 'Membership',
   definition(t) {
-    t.nonNull.string('user_id');
-    t.nonNull.string('group_id');
+    t.implements(Node);
+    t.nonNull.string('userId');
+    t.nonNull.string('groupId');
 
     t.field('user', {
       type: nonNull(User),
       async resolve(source, args, context) {
         const dataloader = context.userDataLoader;
-        return (await dataloader.load(source.user_id))!;
+        return (await dataloader.load(source.userId))!;
       },
     });
 
@@ -25,12 +28,11 @@ export const Membership = objectType({
       type: nonNull(Group),
       async resolve(source, args, context) {
         const dataloader = context.groupDataLoader;
-        return (await dataloader.load(source.group_id))!;
+        return (await dataloader.load(source.groupId))!;
       },
     });
   },
 });
-
 
 export const MembershipMutation = extendType({
   type: Mutation.name,
@@ -38,36 +40,36 @@ export const MembershipMutation = extendType({
     t.field('addMembership', {
       type: Membership,
       args: {
-        user_id: nonNull(stringArg()),
-        group_id: nonNull(stringArg()),
+        userId: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
       },
       async authorize(root, args, context) {
-        return (context.authSource.canViewGroup(args.group_id));
+        return (context.authSource.canViewGroup(args.groupId));
       },
       async resolve(source, args, context) {
         const item: MembershipModel = {
-          user_id: args.user_id,
-          group_id: args.group_id,
-        }
+          id: createRawIdFactory(TableNames.Membership)(MembershipModel.combinedId({userId: args.userId, groupId: args.groupId})),
+          userId: args.userId,
+          groupId: args.groupId,
+        };
         await context.membershipStore.put(item).exec();
         return item;
       },
     });
 
-    
     t.field('deleteMembership', {
-      type: Group, //TODO: 何を返せばいいんだ？？ Membershipではないよな・・
+      type: nullable(Group), // TODO: 何を返せばいいんだ？？ Membershipではないよな・・
       args: {
-        user_id: nonNull(stringArg()),
-        group_id: nonNull(stringArg()),
+        userId: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
       },
       async authorize(root, args, context) {
-        return (context.authSource.canViewGroup(args.group_id));
+        return (context.authSource.canViewGroup(args.groupId));
       },
       async resolve(source, args, context) {
-        await context.membershipStore.delete(args.user_id, args.group_id).exec();
-        const group = await context.groupDataLoader.load(args.group_id);
-        return group;
+        await context.membershipStore.delete(args.userId, args.groupId).exec();
+        const group = await context.groupDataLoader.load(args.groupId);
+        return group ?? null;
       },
     });
   },

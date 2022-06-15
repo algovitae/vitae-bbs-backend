@@ -8,7 +8,8 @@ export const server: ApolloServer = new ApolloServer({
   schema,
   context({req, res}) {
     const authorization = req.headers.authorization;
-    const base64token = authorization?.split(' ').at(1);
+
+    const [, base64token] = authorization ? authorization.split(' ') : [undefined, undefined];
     const token = base64token ? Buffer.from(base64token, 'base64').toString('utf8') : undefined;
     return new AppContext(token);
   },

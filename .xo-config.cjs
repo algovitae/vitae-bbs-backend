@@ -13,6 +13,9 @@ module.exports = {
       "new-cap": "off",
       "unicorn/no-array-for-each": "off",
       "unicorn/no-await-expression-member": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
     },
     ignores: [
       'nexus-typegen.ts'

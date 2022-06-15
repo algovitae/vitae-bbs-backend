@@ -1,4 +1,7 @@
-// eslint-disable-next-line import/no-cycle
+
+import {MembershipModel} from '../../ddb/membrtship';
+import {createRawIdFactory, TableNames} from '../../ddb/node';
+import {Membership} from '../membership';
 import {AppContext} from './app-context';
 
 export class AuthSource {
@@ -10,7 +13,7 @@ export class AuthSource {
       return undefined;
     }
 
-    return JSON.parse(token).user_id as string;
+    return JSON.parse(token).userId as string;
   }
 
   async email() {
@@ -30,26 +33,30 @@ export class AuthSource {
     return this.isAuthorized();
   }
 
-  async canViewGroup(group_id: string) {
+  async canViewGroup(groupId: string) {
     const userId = await this.userId();
-    if(!userId) {
+    console.log('canViewGroup', userId, groupId);
+    if (!userId) {
       return false;
     }
-    console.log('canViewGroup', userId, group_id);
-    const membrtship = await this.context.membershipStore.get(userId, group_id).exec();
-    return !!membrtship;
+
+    console.log('canViewGroup', userId, groupId);
+    const membership = await this.context.membershipStore.get(createRawIdFactory(TableNames.Membership)(MembershipModel.combinedId({userId, groupId}))).exec();
+    return Boolean(membership);
   }
 
-  async canViewThread(group_id: string, thread_id: string) {
+  async canViewThread(threadId: string) {
     const userId = await this.userId();
-    if(!userId) {
+    if (!userId) {
       return false;
     }
-    const thread = await this.context.threadDataLoader.load({group_id, thread_id});
+
+    const thread = await this.context.threadDataLoader.load(threadId);
     if (!thread) {
       return false;
     }
-    const membrtship = await this.context.membershipStore.get(userId, thread.group_id).exec();
-    return !!membrtship;
+
+    const membership = await this.context.membershipStore.get(createRawIdFactory(TableNames.Membership)(MembershipModel.combinedId({userId, groupId: thread.groupId}))).exec();
+    return Boolean(membership);
   }
 }
