@@ -12,6 +12,7 @@ type Group implements Node {
 
   """unique identifier for the resource"""
   id: ID!
+  memberships: [Membership!]!
   threads: [Thread!]!
 }
 

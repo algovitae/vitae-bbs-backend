@@ -87,6 +87,7 @@ export interface NexusGenFieldTypes {
   Group: { // field return type
     groupName: string; // String!
     id: string; // ID!
+    memberships: NexusGenRootTypes['Membership'][]; // [Membership!]!
     threads: NexusGenRootTypes['Thread'][]; // [Thread!]!
   }
   Membership: { // field return type
@@ -149,6 +150,7 @@ export interface NexusGenFieldTypeNames {
   Group: { // field return type name
     groupName: 'String'
     id: 'ID'
+    memberships: 'Membership'
     threads: 'Thread'
   }
   Membership: { // field return type name

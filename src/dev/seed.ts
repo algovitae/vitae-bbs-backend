@@ -32,6 +32,18 @@ async function seed() {
     userName: 'hoge user name',
   }).exec();
 
+  await userIdentityStore.put({
+    id: createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email: 'hoge2@example.com'})),
+    email: 'hoge2@example.com',
+    userId: createRawIdFactory(TableNames.User)('2Am6U2A05qGJDPtPUSdtQOlar85'),
+    passwordHash: '$2a$12$60/wigMCSIg5JpHAjxHS9ukk9RIZHRD1oynlLT6ObdMQScLRq2DiG',
+  }).exec();
+
+  await userStore.put({
+    id: createRawIdFactory(TableNames.User)('2Am6U2A05qGJDPtPUSdtQOlar85'),
+    userName: 'user2',
+  }).exec();
+
   await groupStore.put({
     id: createRawIdFactory(TableNames.Group)('29pq9NeBysRopKer9QfBcNijQEe'),
     groupName: 'group A',

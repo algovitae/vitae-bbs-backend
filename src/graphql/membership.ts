@@ -67,7 +67,7 @@ export const MembershipMutation = extendType({
         return (context.authSource.canViewGroup(args.groupId));
       },
       async resolve(source, args, context) {
-        await context.membershipStore.delete(args.userId, args.groupId).exec();
+        await context.membershipStore.delete(createRawIdFactory(TableNames.Membership)(MembershipModel.combinedId({userId: args.userId, groupId: args.groupId}))).exec();
         const group = await context.groupDataLoader.load(args.groupId);
         return group ?? null;
       },

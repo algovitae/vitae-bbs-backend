@@ -3,6 +3,7 @@ import {extendType, list, nonNull, objectType, queryType, stringArg} from 'nexus
 import {GroupModel} from '../ddb/group';
 import {MembershipModel} from '../ddb/membrtship';
 import {createIdFactory, createRawIdFactory, TableNames} from '../ddb/node';
+import {Membership} from './membership';
 import {Mutation} from './mutation';
 import {Node} from './node';
 import {Query} from './query';
@@ -18,6 +19,13 @@ export const Group = objectType({
       async resolve(source, args, context) {
         const threads = await context.threadStore.query().index('groupIdIndex').wherePartitionKey(source.id).exec();
         return threads;
+      },
+    });
+    t.nonNull.field('memberships', {
+      type: nonNull(list(nonNull(Membership))),
+      async resolve(source, args, context) {
+        const memberships = await context.membershipStore.query().index('groupIdIndex').wherePartitionKey(source.id).exec();
+        return memberships;
       },
     });
   },
