@@ -1,28 +1,30 @@
 
+import {JwtPayload} from 'jsonwebtoken';
 import {MembershipModel} from '../../ddb/membrtship';
 import {createRawIdFactory, TableNames} from '../../ddb/node';
 import {Membership} from '../membership';
+import {kmsVerifyJwt} from '../../util/kms-jwt-sign';
 import {AppContext} from './app-context';
 
 export class AuthSource {
+  verifyPromise: Promise<JwtPayload> | undefined = undefined;
+
   constructor(protected context: AppContext) {}
 
-  async userId() {
-    const token = this.context.rawToken;
-    if (!token) {
-      return undefined;
+  async verifiedToken() {
+    if (!this.verifyPromise) {
+      this.verifyPromise = (async () => kmsVerifyJwt(this.context.rawToken!))();
     }
 
-    return JSON.parse(token).userId as string;
+    return this.verifyPromise;
+  }
+
+  async userId() {
+    return (await this.verifiedToken()).userId as string;
   }
 
   async email() {
-    const token = this.context.rawToken;
-    if (!token) {
-      return undefined;
-    }
-
-    return JSON.parse(token).email as string;
+    return (await this.verifiedToken()).email as string;
   }
 
   async isAuthorized() {

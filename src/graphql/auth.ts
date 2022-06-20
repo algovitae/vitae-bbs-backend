@@ -3,6 +3,7 @@ import {compare} from 'bcrypt';
 import {extendType, mutationType, nonNull, nullable, objectType, queryType, stringArg} from 'nexus';
 import {UserIdentityModel, userIdentityStore} from '../ddb/user-identity';
 import {createRawIdFactory, TableNames} from '../ddb/node';
+import {kmsJwtSign, kmsVerifyJwt} from '../util/kms-jwt-sign';
 import {Mutation} from './mutation';
 import {Query} from './query';
 import {UserIdentity} from './user-identity';
@@ -45,8 +46,13 @@ export const AuthMutation = extendType({
         }
 
         console.debug('login attempt success', userIdentity);
+
+        const token = await kmsJwtSign('alias/auth-development', {userId: userIdentity.userId, email: userIdentity.email});
+        // const verified = kmsVerifyJwt(token);
+        // console.log('verified', verified);
+
         return {
-          token: Buffer.from(JSON.stringify({userId: userIdentity.userId, email: userIdentity.email})).toString('base64'), // TODO: 署名
+          token,
           userIdentity,
         };
       },
