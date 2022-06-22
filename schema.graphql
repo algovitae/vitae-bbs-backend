@@ -33,6 +33,7 @@ type Mutation {
   createThreadComment(body: String!, threadId: String!, title: String!): ThreadComment
   deleteMembership(groupId: String!, userId: String!): Group
   login(email: String!, password: String!): Auth
+  resetPassword(email: String!): Boolean!
 }
 
 interface Node {

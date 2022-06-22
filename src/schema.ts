@@ -5,7 +5,7 @@ import {fieldAuthorizePlugin, interfaceType, makeSchema, objectType, queryType} 
 import {AuthMutation, MeQuery} from './graphql/auth';
 import {Group, GroupMutation, GroupQuery} from './graphql/group';
 import {User, UserQuery} from './graphql/user';
-import {UserIdentity} from './graphql/user-identity';
+import {UserIdentity, UserIdentityMutation} from './graphql/user-identity';
 import {ThreadMutation, ThreadQuery} from './graphql/thread';
 import {ThreadCommentMutation} from './graphql/thread-comment';
 import {MembershipMutation} from './graphql/membership';
@@ -20,6 +20,7 @@ export const schema = makeSchema({
     User,
     UserQuery,
     UserIdentity,
+    UserIdentityMutation,
     Group,
     GroupQuery,
     GroupMutation,

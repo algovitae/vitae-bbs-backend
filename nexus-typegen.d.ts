@@ -104,6 +104,7 @@ export interface NexusGenFieldTypes {
     createThreadComment: NexusGenRootTypes['ThreadComment'] | null; // ThreadComment
     deleteMembership: NexusGenRootTypes['Group'] | null; // Group
     login: NexusGenRootTypes['Auth'] | null; // Auth
+    resetPassword: boolean; // Boolean!
   }
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
@@ -167,6 +168,7 @@ export interface NexusGenFieldTypeNames {
     createThreadComment: 'ThreadComment'
     deleteMembership: 'Group'
     login: 'Auth'
+    resetPassword: 'Boolean'
   }
   Query: { // field return type name
     allUsers: 'User'
@@ -231,6 +233,9 @@ export interface NexusGenArgTypes {
     login: { // args
       email: string; // String!
       password: string; // String!
+    }
+    resetPassword: { // args
+      email: string; // String!
     }
   }
   Query: {

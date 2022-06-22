@@ -44,6 +44,18 @@ async function seed() {
     userName: 'user2',
   }).exec();
 
+  await userIdentityStore.put({
+    id: createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email: 'vitaealgo@gmail.com'})),
+    email: 'vitaealgo@gmail.com',
+    userId: createRawIdFactory(TableNames.User)('2AvLB4jUIGRKJifWuzAIfTFxzpW'),
+    passwordHash: '$2a$12$60/wigMCSIg5JpHAjxHS9ukk9RIZHRD1oynlLT6ObdMQScLRq2DiG',
+  }).exec();
+
+  await userStore.put({
+    id: createRawIdFactory(TableNames.User)('2AvLB4jUIGRKJifWuzAIfTFxzpW'),
+    userName: 'vitae algo',
+  }).exec();
+
   await groupStore.put({
     id: createRawIdFactory(TableNames.Group)('29pq9NeBysRopKer9QfBcNijQEe'),
     groupName: 'group A',
