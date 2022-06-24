@@ -22,4 +22,8 @@
     "files": [
         "./nexus-typegen.d.ts",
     ],
+    "include": [
+        "src/*.ts",
+        "src/**/*.ts"
+    ]
 }
