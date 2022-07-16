@@ -18,6 +18,6 @@ module.exports = {
       "@typescript-eslint/no-unsafe-call": "off",
     },
     ignores: [
-      'nexus-typegen.ts'
+      'nexus-typegen.d.ts'
     ]
   }

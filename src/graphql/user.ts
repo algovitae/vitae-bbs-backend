@@ -9,6 +9,7 @@ export const User = objectType({
   definition(t) {
     t.implements(Node);
     t.nonNull.string('userName');
+    t.nonNull.string('userTitle');
 
     t.field('memberships', {
       type: nonNull(list(nonNull(Membership))),

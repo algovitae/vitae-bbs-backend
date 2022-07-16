@@ -29,6 +29,11 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  App: { // root type
+    maintainer?: string | null; // String
+    title?: string | null; // String
+    user_title_label?: string | null; // String
+  }
   Auth: { // root type
     token?: string | null; // String
     userIdentity?: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
@@ -59,6 +64,7 @@ export interface NexusGenObjects {
   User: { // root type
     id: string; // ID!
     userName: string; // String!
+    userTitle: string; // String!
   }
   UserIdentity: { // root type
     email: string; // String!
@@ -80,6 +86,11 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  App: { // field return type
+    maintainer: string | null; // String
+    title: string | null; // String
+    user_title_label: string | null; // String
+  }
   Auth: { // field return type
     token: string | null; // String
     userIdentity: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
@@ -103,11 +114,13 @@ export interface NexusGenFieldTypes {
     createThread: NexusGenRootTypes['Thread'] | null; // Thread
     createThreadComment: NexusGenRootTypes['ThreadComment'] | null; // ThreadComment
     deleteMembership: NexusGenRootTypes['Group'] | null; // Group
+    initiateSignup: boolean; // Boolean!
     login: NexusGenRootTypes['Auth'] | null; // Auth
     resetPassword: boolean; // Boolean!
   }
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
+    app: NexusGenRootTypes['App'] | null; // App
     group: NexusGenRootTypes['Group'] | null; // Group
     thread: NexusGenRootTypes['Thread'] | null; // Thread
     userIdentityByAuthorization: NexusGenRootTypes['UserIdentity'] | null; // UserIdentity
@@ -130,6 +143,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     memberships: NexusGenRootTypes['Membership'][]; // [Membership!]!
     userName: string; // String!
+    userTitle: string; // String!
   }
   UserIdentity: { // field return type
     email: string; // String!
@@ -144,6 +158,11 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  App: { // field return type name
+    maintainer: 'String'
+    title: 'String'
+    user_title_label: 'String'
+  }
   Auth: { // field return type name
     token: 'String'
     userIdentity: 'UserIdentity'
@@ -167,11 +186,13 @@ export interface NexusGenFieldTypeNames {
     createThread: 'Thread'
     createThreadComment: 'ThreadComment'
     deleteMembership: 'Group'
+    initiateSignup: 'Boolean'
     login: 'Auth'
     resetPassword: 'Boolean'
   }
   Query: { // field return type name
     allUsers: 'User'
+    app: 'App'
     group: 'Group'
     thread: 'Thread'
     userIdentityByAuthorization: 'UserIdentity'
@@ -194,6 +215,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     memberships: 'Membership'
     userName: 'String'
+    userTitle: 'String'
   }
   UserIdentity: { // field return type name
     email: 'String'
@@ -229,6 +251,10 @@ export interface NexusGenArgTypes {
     deleteMembership: { // args
       groupId: string; // String!
       userId: string; // String!
+    }
+    initiateSignup: { // args
+      email: string; // String!
+      passphrase: string; // String!
     }
     login: { // args
       email: string; // String!

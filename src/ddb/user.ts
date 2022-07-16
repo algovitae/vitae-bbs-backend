@@ -14,6 +14,9 @@ export class UserModel {
 
   @Property()
     userName!: string;
+
+  @Property()
+    userTitle!: string;
 }
 
 export const userStore = new DynamoStore(UserModel);

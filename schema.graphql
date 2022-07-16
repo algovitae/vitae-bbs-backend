@@ -2,6 +2,12 @@
 ### Do not make changes to this file directly
 
 
+type App {
+  maintainer: String
+  title: String
+  user_title_label: String
+}
+
 type Auth {
   token: String
   userIdentity: UserIdentity
@@ -32,6 +38,7 @@ type Mutation {
   createThread(groupId: String!, threadName: String!): Thread
   createThreadComment(body: String!, threadId: String!, title: String!): ThreadComment
   deleteMembership(groupId: String!, userId: String!): Group
+  initiateSignup(email: String!, passphrase: String!): Boolean!
   login(email: String!, password: String!): Auth
   resetPassword(email: String!): Boolean!
 }
@@ -43,6 +50,7 @@ interface Node {
 
 type Query {
   allUsers: [User!]!
+  app: App
   group(id: String!): Group
   thread(id: String!): Thread
   userIdentityByAuthorization: UserIdentity
@@ -73,6 +81,7 @@ type User implements Node {
   id: ID!
   memberships: [Membership!]!
   userName: String!
+  userTitle: String!
 }
 
 type UserIdentity implements Node {

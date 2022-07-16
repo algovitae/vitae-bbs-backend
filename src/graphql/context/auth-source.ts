@@ -13,7 +13,7 @@ export class AuthSource {
 
   async verifiedToken() {
     if (!this.verifyPromise) {
-      this.verifyPromise = (async () => kmsVerifyJwt(this.context.rawToken!))();
+      this.verifyPromise = (async () => kmsVerifyJwt(this.context.rawToken!, 'auth', 'alias/auth-development'))();
     }
 
     return this.verifyPromise;

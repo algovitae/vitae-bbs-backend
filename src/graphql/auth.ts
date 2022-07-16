@@ -47,8 +47,8 @@ export const AuthMutation = extendType({
 
         console.debug('login attempt success', userIdentity);
 
-        const token = await kmsJwtSign('alias/auth-development', {userId: userIdentity.userId, email: userIdentity.email});
-        // const verified = kmsVerifyJwt(token);
+        const token = await kmsJwtSign({userId: userIdentity.userId, email: userIdentity.email, purpose: 'auth'}, 'alias/auth-development');
+        // Const verified = kmsVerifyJwt(token);
         // console.log('verified', verified);
 
         return {

@@ -3,8 +3,13 @@ import {KMS} from 'aws-sdk';
 import KSUID from 'ksuid';
 import {JwtHeader, JwtPayload, verify} from 'jsonwebtoken';
 import {derToJose} from 'ecdsa-sig-formatter';
+import jose from 'node-jose';
 
-export async function kmsJwtSign(keyAlias: string, payload: JwtPayload): Promise<string> {
+export type AuthJwtPayload = JwtPayload & {purpose: 'auth'};
+export type SignupJwtPayload = JwtPayload & {purpose: 'signup'};
+export type AppJwtPayload = AuthJwtPayload | SignupJwtPayload;
+
+export async function kmsJwtSign(payload: AppJwtPayload, keyAlias: string): Promise<string> {
   const header: JwtHeader = {alg: 'ES512', typ: 'JWT'};
 
   const encoded_header = base64url(JSON.stringify(header));
@@ -30,16 +35,32 @@ export async function kmsJwtSign(keyAlias: string, payload: JwtPayload): Promise
   return `${encoded_header}.${encoded_payload}.${encoded_signature}`;
 }
 
-export async function kmsVerifyJwt(jwt: string): Promise<JwtPayload> {
-  // TODO: 公開鍵をAPI経由で取得する＆キャッシュ
-  const publicKey = `-----BEGIN PUBLIC KEY-----
-MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQAhyFFmL1eMIeWHsMtB0ok+4kwtcvD
-deIxiCcfwWv/CpTvK3Hniacd6VRGZ79Evnidn9r+qN8KzOtCIr8Gw0nh7lIAJQW2
-TcZumJd8dSeGffBtNuJouz8duROfIIjX4RKjoGMwXc0P0M4L8DOB9PfqsdMj2omG
-0QgXEc6ZHsVFIwJz1OQ=
------END PUBLIC KEY-----
-  `;
+const publicKeys = new Map<string, string>();
+
+async function getPublicKey(keyAlias: string) {
+  let publicKey = publicKeys.get(keyAlias);
+  if (publicKey) {
+    return publicKey;
+  }
+
+  const kms = new KMS();
+  const parameters: KMS.GetPublicKeyRequest = {
+    KeyId: keyAlias,
+  };
+  const result = await kms.getPublicKey(parameters).promise();
+  publicKey = (await jose.JWK.asKey(result.PublicKey!, 'spki')).toPEM();
+  console.log(keyAlias, publicKey);
+  publicKeys.set(keyAlias, publicKey);
+  return publicKey;
+}
+
+export async function kmsVerifyJwt(jwt: string, purpose: AppJwtPayload['purpose'], keyAlias: string): Promise<AppJwtPayload> {
+  const publicKey = await getPublicKey(keyAlias);
   const verified = verify(jwt, publicKey, {complete: true});
-  // Console.log(verified);
-  return verified.payload as JwtPayload;
+  const payload = verified.payload as AppJwtPayload;
+  if (payload.purpose !== purpose) {
+    throw new Error('purpose not match');
+  }
+
+  return payload;
 }

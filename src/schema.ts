@@ -9,12 +9,15 @@ import {UserIdentity, UserIdentityMutation} from './graphql/user-identity';
 import {ThreadMutation, ThreadQuery} from './graphql/thread';
 import {ThreadCommentMutation} from './graphql/thread-comment';
 import {MembershipMutation} from './graphql/membership';
+import {App, AppQuery} from './graphql/app';
 
 const isLambda = Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 const isTsNode = Boolean(process.env.TS_NODE_DEV);
 
 export const schema = makeSchema({
   types: {
+    App,
+    AppQuery,
     AuthMutation,
     MeQuery,
     User,
