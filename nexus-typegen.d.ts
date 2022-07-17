@@ -117,6 +117,7 @@ export interface NexusGenFieldTypes {
     initiateSignup: boolean; // Boolean!
     login: NexusGenRootTypes['Auth'] | null; // Auth
     resetPassword: boolean; // Boolean!
+    signup: boolean; // Boolean!
   }
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
@@ -189,6 +190,7 @@ export interface NexusGenFieldTypeNames {
     initiateSignup: 'Boolean'
     login: 'Auth'
     resetPassword: 'Boolean'
+    signup: 'Boolean'
   }
   Query: { // field return type name
     allUsers: 'User'
@@ -262,6 +264,12 @@ export interface NexusGenArgTypes {
     }
     resetPassword: { // args
       email: string; // String!
+    }
+    signup: { // args
+      password: string; // String!
+      token: string; // String!
+      userName: string; // String!
+      userTitle: string; // String!
     }
   }
   Query: {

@@ -30,6 +30,7 @@ async function seed() {
   await userStore.put({
     id: createRawIdFactory(TableNames.User)('29onBfWqwv90Dvlaszo0mWUSJ6x'),
     userName: 'hoge user name',
+    userTitle: '部長',
   }).exec();
 
   await userIdentityStore.put({
@@ -42,6 +43,7 @@ async function seed() {
   await userStore.put({
     id: createRawIdFactory(TableNames.User)('2Am6U2A05qGJDPtPUSdtQOlar85'),
     userName: 'user2',
+    userTitle: '部長',
   }).exec();
 
   await userIdentityStore.put({
@@ -54,6 +56,7 @@ async function seed() {
   await userStore.put({
     id: createRawIdFactory(TableNames.User)('2AvLB4jUIGRKJifWuzAIfTFxzpW'),
     userName: 'vitae algo',
+    userTitle: '部長',
   }).exec();
 
   await groupStore.put({

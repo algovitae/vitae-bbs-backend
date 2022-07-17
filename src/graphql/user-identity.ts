@@ -1,11 +1,14 @@
+import {TransactPut, TransactWriteRequest} from '@shiftcoders/dynamo-easy';
 import {SESV2} from 'aws-sdk';
-import {hash, hashSync} from 'bcrypt';
+import {hash} from 'bcrypt';
 import {generate} from 'generate-password';
+import ksuid from 'ksuid';
 import {arg, extendType, nonNull, nullable, objectType, stringArg} from 'nexus';
 import {createRawIdFactory, TableNames} from '../ddb/node';
+import {UserModel} from '../ddb/user';
 import {UserIdentityModel} from '../ddb/user-identity';
 import {getDomains} from '../util/domain';
-import {kmsJwtSign} from '../util/kms-jwt-sign';
+import {kmsJwtSign, kmsVerifyJwt} from '../util/kms-jwt-sign';
 import {getPassphraseConfig} from '../util/passphrase';
 import {getSiteConfig} from '../util/site';
 import {Mutation} from './mutation';
@@ -125,7 +128,7 @@ export const UserIdentityMutation = extendType({
               },
               Body: {
                 Text: {
-                  Data: `次のURLをブラウザで開き、会員登録を完了させてください\nhttps://${webDomain}/signup2?token=${signupToken}`,
+                  Data: `次のURLをブラウザで開き、会員登録を完了させてください\nhttps://${webDomain}/signup3?token=${signupToken}`,
                   // eslint-disable-next-line unicorn/text-encoding-identifier-case
                   Charset: 'UTF-8',
                 },
@@ -140,6 +143,50 @@ export const UserIdentityMutation = extendType({
 
         const result = await ses.sendEmail(parameters).promise();
         return Boolean(result.MessageId);
+      },
+    });
+
+    t.field('signup', {
+      type: nonNull('Boolean'),
+      args: {
+        token: nonNull(stringArg()),
+        userName: nonNull(stringArg()),
+        userTitle: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+      },
+      async authorize(root, args, context) {
+        return true;
+      },
+      async resolve(source, args, context) {
+        const verified = await kmsVerifyJwt(args.token, 'signup', 'alias/auth-development');
+        const userIdentity = await context.userIdentityStore.get(createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email: verified.email}))).exec();
+
+        if (userIdentity) {
+          return false;
+        }
+
+        const userId = createRawIdFactory(TableNames.User)(ksuid.randomSync().toString());
+        const userIdentityId = createRawIdFactory(TableNames.UserIdentity)(UserIdentityModel.combinedId({email: verified.email}));
+        const transaction = new TransactWriteRequest();
+        transaction.transact(new TransactPut(UserModel, {
+          id: userId,
+          userName: args.userName,
+          userTitle: args.userTitle,
+        }));
+
+        transaction.transact(new TransactPut(
+          UserIdentityModel,
+          {
+            id: userIdentityId,
+            userId,
+            email: verified.email as string,
+            passwordHash: await hash(args.password, 10),
+          },
+        ));
+
+        await transaction.exec();
+
+        return true;
       },
     });
   },

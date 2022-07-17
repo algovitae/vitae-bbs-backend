@@ -6,7 +6,7 @@
   "author": "algovitae <algovitae@zohomail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "AWS_REGION=ap-northeast-1 ts-node-dev src/index.ts",
     "seed:dev": "ts-node ./src/dev/seed.ts",
     "build": "tsc",
     "test": "xo"
